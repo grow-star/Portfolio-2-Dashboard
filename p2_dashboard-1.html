@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2 — Future Income & Growth</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d12;
+    --surface: #111520;
+    --surface2: #161c2a;
+    --border: #1e2638;
+    --border2: #2a3450;
+    --gold: #c9a84c;
+    --gold2: #e8c97a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --gold-dim2: rgba(201,168,76,0.08);
+    --green: #4caf82;
+    --green-dim: rgba(76,175,130,0.15);
+    --red: #e05c5c;
+    --red-dim: rgba(224,92,92,0.15);
+    --yellow: #d4a843;
+    --yellow-dim: rgba(212,168,67,0.15);
+    --blue: #5b8fd4;
+    --blue-dim: rgba(91,143,212,0.15);
+    --text: #e8eaf0;
+    --text2: #8a92a8;
+    --text3: #4a5268;
+    --phase: #7b6cf6;
+    --phase-dim: rgba(123,108,246,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left { display: flex; align-items: baseline; gap: 12px; }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+  }
+  .header-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .phase-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    background: var(--phase-dim);
+    border: 1px solid var(--phase);
+    color: var(--phase);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 18px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--text2); }
+  .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* CONTENT */
+  .content { padding: 20px; max-width: 900px; margin: 0 auto; }
+  .tab { display: none; }
+  .tab.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .card-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+  .stat-block { }
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .stat-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin: 8px 0; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+  .progress-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .fill-gold { background: var(--gold); }
+  .fill-green { background: var(--green); }
+  .fill-blue { background: var(--blue); }
+  .fill-phase { background: var(--phase); }
+
+  /* PHASE CARD */
+  .phase-card {
+    background: var(--phase-dim);
+    border: 1px solid var(--phase);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--phase);
+    margin-bottom: 6px;
+  }
+  .phase-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .phase-trigger {
+    margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--phase);
+    background: rgba(123,108,246,0.1);
+    padding: 6px 10px;
+    border-radius: 4px;
+  }
+
+  /* INPUTS */
+  input, select {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 8px 10px;
+    width: 100%;
+    outline: none;
+    transition: border 0.2s;
+  }
+  input:focus, select:focus { border-color: var(--gold); }
+  input::placeholder { color: var(--text3); }
+
+  label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .field { margin-bottom: 12px; }
+
+  /* BUTTONS */
+  .btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: #0a0d12;
+    font-weight: 500;
+  }
+  .btn-gold:hover { background: var(--gold2); }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-sm { padding: 6px 12px; font-size: 10px; }
+  .btn-danger {
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    color: var(--red);
+  }
+
+  /* TAGS */
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+  }
+  .tag-green { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+  .tag-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow); }
+  .tag-red { background: var(--red-dim); color: var(--red); border: 1px solid var(--red); }
+  .tag-gold { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--gold); }
+  .tag-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid var(--blue); }
+  .tag-phase { background: var(--phase-dim); color: var(--phase); border: 1px solid var(--phase); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  td.mono { font-family: 'IBM Plex Mono', monospace; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  /* ALLOCATOR OUTPUT */
+  .alloc-result {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .alloc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .alloc-row:last-child { border-bottom: none; }
+  .alloc-ticker {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--gold);
+    width: 60px;
+  }
+  .alloc-reason {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    flex: 1;
+    padding: 0 12px;
+  }
+  .alloc-amount {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    text-align: right;
+  }
+  .alloc-shares {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    text-align: right;
+  }
+
+  /* PROJECTION CHART */
+  .proj-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 120px;
+    margin: 16px 0 8px;
+    padding: 0 4px;
+  }
+  .proj-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .proj-bar {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+    transition: height 0.5s ease;
+    position: relative;
+  }
+  .proj-bar-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    margin-bottom: 4px;
+    text-align: center;
+  }
+  .proj-bar-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+    margin-top: 6px;
+    text-align: center;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* GATE ROW */
+  .gate-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+  }
+  .gate-row:last-child { border-bottom: none; }
+  .gate-icon { font-size: 14px; width: 20px; text-align: center; }
+  .gate-label { flex: 1; color: var(--text2); }
+  .gate-value { color: var(--text); font-weight: 500; }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text3);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  /* DIST FILTER */
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: none;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn.active { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+  /* SCROLL TABLE WRAP */
+  .table-wrap { overflow-x: auto; }
+
+  @media (max-width: 600px) {
+    .grid2, .grid3, .grid4 { grid-template-columns: 1fr 1fr; }
+    .content { padding: 14px; }
+    .stat-value { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-title">Portfolio II</div>
+    <div class="header-sub">Future Income & Growth</div>
+  </div>
+  <div class="phase-badge" id="headerPhase">Phase 1</div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('overview')">Overview</button>
+  <button class="nav-btn" onclick="showTab('allocate')">Allocate</button>
+  <button class="nav-btn" onclick="showTab('satellites')">Satellites</button>
+  <button class="nav-btn" onclick="showTab('projections')">Projections</button>
+  <button class="nav-btn" onclick="showTab('distlog')">Dist Log</button>
+  <button class="nav-btn" onclick="showTab('funds')">Funds</button>
+  <button class="nav-btn" onclick="showTab('data')">Data</button>
+</nav>
+
+<div class="content">
+
+  <!-- ═══════════════════════════════ OVERVIEW ═══════════════════════════════ -->
+  <div class="tab active" id="tab-overview">
+
+    <div id="overviewPhaseCard" class="phase-card">
+      <div class="phase-title">Phase 1 — Satellite Accumulation</div>
+      <div class="phase-desc">All Core 4 distributions route to BTC treasury satellites (MSTR, MPJPY, ASST). Building toward 100-share caps on MPJPY and ASST. Income architecture is compounding.</div>
+      <div class="phase-trigger" id="phaseTrigger">⬡ Trigger: MPJPY + ASST both reach 100 shares → Phase 2 activates</div>
+    </div>
+
+    <div class="grid4" style="margin-bottom:14px;">
+      <div class="card" style="margin-bottom:0;">
+        <div class="stat-label">Portfolio Value</div>
+        <div class="stat-value" id="ovPortfolioVal">—</div>
+        <div class="stat-sub" id="ovPortfolioSub">based on cost basis</div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="stat-label">Blended Yield</div>
+        <div class="stat-value" id="ovBlendedYield">—</div>
+        <div class="stat-sub" id="ovYieldSub">annual est.</div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="stat-label">Monthly Income</div>
+        <div class="stat-value" id="ovMonthlyInc">—</div>
+        <div class="stat-sub">trailing 3-month avg</div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="stat-label">Total to Satellites</div>
+        <div class="stat-value" id="ovToSatellites">—</div>
+        <div class="stat-sub">lifetime deployed</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Core 4 Allocation vs Target</div>
+      <div id="ovCore4Bars"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Satellite Progress</div>
+      <div id="ovSatBars"></div>
+      <div style="margin-top:10px;">
+        <span class="stat-label">BTC Treasury Sleeve</span>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span id="ovSleeveLabel">0% of P2</span>
+            <span style="color:var(--red)">10% max</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill fill-phase" id="ovSleeveFill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Year 10 / 15 / 20 Income Snapshot</div>
+      <div class="grid3">
+        <div class="stat-block">
+          <div class="stat-label">Year 10</div>
+          <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)" id="ovY10">—</div>
+          <div class="stat-sub">/month</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-label">Year 15</div>
+          <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)" id="ovY15">—</div>
+          <div class="stat-sub">/month</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-label">Year 20</div>
+          <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)" id="ovY20">—</div>
+          <div class="stat-sub">/month</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recent Distributions</div>
+      <div id="ovRecentDist"></div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ ALLOCATE ═══════════════════════════════ -->
+  <div class="tab" id="tab-allocate">
+
+    <div class="card">
+      <div class="card-title">Step 1 — Enter Current Prices</div>
+      <div style="margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);">Par = $100 for STRC/STRF/STRK. Above par = blocked from contributions this round.</div>
+      <div class="grid3">
+        <div class="field"><label>STRC Price</label><input type="number" id="priceSTRC" placeholder="100.00" step="0.01"></div>
+        <div class="field"><label>STRF Price</label><input type="number" id="priceSTRF" placeholder="100.00" step="0.01"></div>
+        <div class="field"><label>STRK Price</label><input type="number" id="priceSTRK" placeholder="100.00" step="0.01"></div>
+        <div class="field"><label>VT Price</label><input type="number" id="priceVT" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>MSTR Price</label><input type="number" id="priceMSTR" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>MPJPY Price</label><input type="number" id="priceMPJPY" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>ASST Price</label><input type="number" id="priceASST" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>SCHD Price</label><input type="number" id="priceSCHD" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>CGDV Price</label><input type="number" id="priceCGDV" placeholder="0.00" step="0.01"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Step 2 — Contribution or Distribution Amount</div>
+      <div class="grid2">
+        <div class="field">
+          <label>Type</label>
+          <select id="allocType">
+            <option value="contribution">Contribution (→ Core 4)</option>
+            <option value="distribution">Distribution (→ Satellites / DG)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Dollar Amount</label>
+          <input type="number" id="allocAmount" placeholder="0.00" step="0.01">
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="runAllocator()" style="width:100%;margin-top:4px;">Run Allocator</button>
+    </div>
+
+    <div id="allocOutput"></div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ SATELLITES ═══════════════════════════════ -->
+  <div class="tab" id="tab-satellites">
+
+    <div class="card">
+      <div class="card-title">BTC Treasury Sleeve — Concentration Gate</div>
+      <div id="satConcentration"></div>
+    </div>
+
+    <div id="satCards"></div>
+
+    <div class="card">
+      <div class="card-title">Phase Trigger Status</div>
+      <div id="phaseTriggerDetail"></div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ PROJECTIONS ═══════════════════════════════ -->
+  <div class="tab" id="tab-projections">
+
+    <div class="card">
+      <div class="card-title">Projection Inputs</div>
+      <div class="grid2">
+        <div class="field">
+          <label>Monthly Contribution ($)</label>
+          <input type="number" id="projContrib" placeholder="500" step="10">
+        </div>
+        <div class="field">
+          <label>Yield Assumption (%)</label>
+          <input type="number" id="projYield" value="9" step="0.1" min="1" max="20">
+        </div>
+        <div class="field">
+          <label>Starting Portfolio Value ($)</label>
+          <input type="number" id="projStart" placeholder="auto from funds" step="100">
+        </div>
+        <div class="field">
+          <label>Double Contributions at Year</label>
+          <select id="projDoubleAt">
+            <option value="0">No doubling</option>
+            <option value="5">Year 5</option>
+            <option value="10" selected>Year 10</option>
+            <option value="15">Year 15</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="runProjections()" style="width:100%;margin-top:4px;">Calculate Projections</button>
+    </div>
+
+    <div id="projOutput"></div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ DIST LOG ═══════════════════════════════ -->
+  <div class="tab" id="tab-distlog">
+
+    <div class="card">
+      <div class="card-title">Log Distribution</div>
+      <div class="grid3">
+        <div class="field">
+          <label>Ticker</label>
+          <select id="dlTicker" style="width:100%">
+            <option value="">Select fund</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Amount ($)</label>
+          <input type="number" id="dlAmount" placeholder="0.00" step="0.01">
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="dlDate">
+        </div>
+      </div>
+      <div class="field">
+        <label>Routed To</label>
+        <select id="dlRoutedTo">
+          <optgroup label="── BTC Satellites">
+            <option value="MSTR">MSTR</option>
+            <option value="MPJPY">MPJPY</option>
+            <option value="ASST">ASST</option>
+          </optgroup>
+          <optgroup label="── Dividend Growth">
+            <option value="SCHD">SCHD</option>
+            <option value="CGDV">CGDV</option>
+          </optgroup>
+          <optgroup label="── Internal">
+            <option value="Core4">Back to Core 4</option>
+          </optgroup>
+          <optgroup label="── External / Other">
+            <option value="P1-CSHI">P1 / CSHI (Tax Buffer)</option>
+            <option value="BTC-Direct">BTC Direct</option>
+            <option value="External">External / Other</option>
+          </optgroup>
+        </select>
+      </div>
+      <button class="btn btn-gold" onclick="addDist()" style="margin-top:4px;">Log Distribution</button>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="setDistFilter('30d',this)">30D</button>
+      <button class="filter-btn" onclick="setDistFilter('90d',this)">90D</button>
+      <button class="filter-btn" onclick="setDistFilter('ytd',this)">YTD</button>
+      <button class="filter-btn" onclick="setDistFilter('all',this)">All</button>
+    </div>
+
+    <div class="grid4" style="margin-bottom:14px;" id="dlStats"></div>
+
+    <div class="card">
+      <div class="card-title">Distribution History</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Ticker</th><th>Amount</th><th>Routed To</th><th></th></tr></thead>
+          <tbody id="dlTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ FUNDS ═══════════════════════════════ -->
+  <div class="tab" id="tab-funds">
+
+    <div class="card">
+      <div class="card-title">Add / Edit Fund</div>
+      <div class="grid3">
+        <div class="field"><label>Ticker</label><input type="text" id="fTicker" placeholder="e.g. STRC" style="text-transform:uppercase"></div>
+        <div class="field">
+          <label>Sleeve</label>
+          <select id="fSleeve">
+            <option value="core4">Core 4</option>
+            <option value="satellite">BTC Satellite</option>
+            <option value="dg">Dividend Growth</option>
+          </select>
+        </div>
+        <div class="field"><label>Shares Owned</label><input type="number" id="fShares" placeholder="0" step="0.001"></div>
+        <div class="field"><label>Avg Cost / Share ($)</label><input type="number" id="fAvgCost" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>Annual Dist / Share ($)</label><input type="number" id="fDistPerShare" placeholder="0.00" step="0.01"></div>
+        <div class="field">
+          <label>Frequency</label>
+          <select id="fFreq">
+            <option value="monthly">Monthly</option>
+            <option value="quarterly">Quarterly</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Target Ratio % (Core 4 only — 35/35/15/15)</label>
+        <input type="number" id="fTargetRatio" placeholder="e.g. 35" step="1" min="0" max="100">
+      </div>
+      <button class="btn btn-gold" onclick="addFund()" style="margin-top:4px;">Save Fund</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Core 4</div>
+      <div id="fundsCore4"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">BTC Treasury Satellites</div>
+      <div id="fundsSatellites"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Dividend Growth Sleeve</div>
+      <div id="fundsDG"></div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ DATA ═══════════════════════════════ -->
+  <div class="tab" id="tab-data">
+
+    <div class="card">
+      <div class="card-title">Storage</div>
+      <div id="storageInfo" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);margin-bottom:12px;"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-gold" onclick="exportJSON()">Export JSON</button>
+        <button class="btn btn-outline" onclick="exportCSV()">Export CSV</button>
+        <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">Import JSON</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Danger Zone</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);margin-bottom:12px;">Resetting will permanently delete all funds, distributions, and settings.</div>
+      <button class="btn btn-danger" onclick="resetAll()">Reset All Data</button>
+    </div>
+
+  </div>
+
+</div><!-- /content -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA STORE
+// ═══════════════════════════════════════════════════════
+const STORE_KEY = 'p2_v1';
+
+function defaultData() {
+  return {
+    funds: [],
+    distributions: [],
+    version: 1
+  };
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return defaultData();
+    return JSON.parse(raw);
+  } catch(e) { return defaultData(); }
+}
+
+function save(data) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+}
+
+let DB = load();
+
+// ═══════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'overview') renderOverview();
+  if (name === 'satellites') renderSatellites();
+  if (name === 'distlog') renderDistLog();
+  if (name === 'funds') renderFunds();
+  if (name === 'data') renderData();
+  if (name === 'projections') prefillProjections();
+}
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+const fmt$ = v => '$' + (v||0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtPct = v => (v||0).toFixed(1) + '%';
+const fmtShares = v => (v||0).toFixed(3);
+
+function portfolioValue() {
+  return DB.funds.reduce((s,f) => s + (f.shares||0)*(f.avgCost||0), 0);
+}
+
+function satelliteSleeveValue() {
+  return DB.funds.filter(f=>f.sleeve==='satellite')
+    .reduce((s,f) => s + (f.shares||0)*(f.avgCost||0), 0);
+}
+
+function blendedYield() {
+  const pv = portfolioValue();
+  if (!pv) return 0;
+  const annualInc = DB.funds.reduce((s,f) => {
+    const annual = (f.shares||0) * (f.distPerShare||0);
+    return s + annual;
+  }, 0);
+  return (annualInc / pv) * 100;
+}
+
+function trailing3MonthIncome() {
+  const now = new Date();
+  const cutoff = new Date(now.getFullYear(), now.getMonth()-3, now.getDate());
+  return DB.distributions
+    .filter(d => new Date(d.date) >= cutoff)
+    .reduce((s,d) => s + (d.amount||0), 0) / 3;
+}
+
+function totalToSatellites() {
+  return DB.distributions
+    .filter(d => ['MSTR','MPJPY','ASST'].includes(d.routedTo))
+    .reduce((s,d) => s + (d.amount||0), 0);
+}
+
+function portfolioValueLive(prices) {
+  return DB.funds.reduce((s, f) => {
+    const live = (prices && prices[f.ticker]) || f.avgCost || 0;
+    return s + (f.shares || 0) * live;
+  }, 0);
+}
+
+function satelliteSleeveValueLive(prices) {
+  return DB.funds
+    .filter(f => f.sleeve === 'satellite')
+    .reduce((s, f) => {
+      const live = (prices && prices[f.ticker]) || f.avgCost || 0;
+      return s + (f.shares || 0) * live;
+    }, 0);
+}
+
+function getSatellite(ticker) {
+  return DB.funds.find(f => f.ticker === ticker && f.sleeve === 'satellite');
+}
+
+function getPhase() {
+  const mpjpy = getSatellite('MPJPY');
+  const asst = getSatellite('ASST');
+  if (mpjpy && asst && (mpjpy.shares||0) >= 100 && (asst.shares||0) >= 100) return 2;
+  return 1;
+}
+
+function filterDists(range) {
+  const now = new Date();
+  return DB.distributions.filter(d => {
+    const dt = new Date(d.date);
+    if (range === '30d') return (now - dt) <= 30*86400000;
+    if (range === '90d') return (now - dt) <= 90*86400000;
+    if (range === 'ytd') return dt.getFullYear() === now.getFullYear();
+    return true;
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// OVERVIEW
+// ═══════════════════════════════════════════════════════
+function renderOverview() {
+  const pv = portfolioValue();
+  const by = blendedYield();
+  const mi = trailing3MonthIncome();
+  const ts = totalToSatellites();
+  const phase = getPhase();
+
+  document.getElementById('ovPortfolioVal').textContent = fmt$(pv);
+  document.getElementById('ovBlendedYield').textContent = fmtPct(by);
+  document.getElementById('ovMonthlyInc').textContent = fmt$(mi);
+  document.getElementById('ovToSatellites').textContent = fmt$(ts);
+  document.getElementById('headerPhase').textContent = 'Phase ' + phase;
+
+  // Phase card
+  const pc = document.getElementById('overviewPhaseCard');
+  const pt = document.getElementById('phaseTrigger');
+  if (phase === 1) {
+    pc.querySelector('.phase-title').textContent = 'Phase 1 — Satellite Accumulation';
+    pc.querySelector('.phase-desc').textContent = 'All Core 4 distributions route to BTC treasury satellites. Building toward 100-share caps on MPJPY and ASST.';
+    pt.textContent = '⬡ Trigger: MPJPY + ASST both reach 100 shares → Phase 2 activates';
+  } else {
+    pc.querySelector('.phase-title').textContent = 'Phase 2 — Dividend Growth Activation';
+    pc.querySelector('.phase-desc').textContent = 'MPJPY and ASST have reached 100 shares. Begin covered calls. Premium routes to SCHD/CGDV dividend growth sleeve. MSTR accumulation continues.';
+    pt.textContent = '✓ Phase 2 active — covered calls and dividend growth sleeve online';
+    pc.style.borderColor = 'var(--green)';
+    pc.style.background = 'var(--green-dim)';
+    pc.querySelector('.phase-title').style.color = 'var(--green)';
+    pt.style.color = 'var(--green)';
+  }
+
+  // Core 4 allocation bars
+  const core4 = DB.funds.filter(f => f.sleeve === 'core4');
+  const core4Val = core4.reduce((s,f) => s + (f.shares||0)*(f.avgCost||0), 0);
+  let barsHTML = '';
+  if (core4.length === 0) {
+    barsHTML = '<div class="empty">No Core 4 funds added yet</div>';
+  } else {
+    core4.forEach(f => {
+      const fv = (f.shares||0)*(f.avgCost||0);
+      const actual = core4Val ? (fv/core4Val*100) : 0;
+      const target = f.targetRatio || 0;
+      const drift = actual - target;
+      barsHTML += `<div class="progress-wrap">
+        <div class="progress-label">
+          <span style="color:var(--text)">${f.ticker}</span>
+          <span>${fmtPct(actual)} actual &nbsp;|&nbsp; ${fmtPct(target)} target &nbsp;
+            <span style="color:${Math.abs(drift)>5?'var(--red)':'var(--text3)'}">${drift>=0?'+':''}${drift.toFixed(1)}%</span>
+          </span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill fill-gold" style="width:${Math.min(actual,100)}%"></div></div>
+      </div>`;
+    });
+  }
+  document.getElementById('ovCore4Bars').innerHTML = barsHTML;
+
+  // Satellite progress
+  const sats = ['MSTR','MPJPY','ASST'];
+  let satHTML = '';
+  sats.forEach(ticker => {
+    const f = getSatellite(ticker);
+    const shares = f ? (f.shares||0) : 0;
+    const pct = Math.min(shares/100*100, 100);
+    const color = shares >= 100 ? 'fill-green' : 'fill-gold';
+    satHTML += `<div class="progress-wrap">
+      <div class="progress-label">
+        <span style="color:var(--text)">${ticker}</span>
+        <span>${fmtShares(shares)} / 100 shares</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill ${color}" style="width:${pct}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('ovSatBars').innerHTML = satHTML;
+
+  // Sleeve concentration
+  const sleeveVal = satelliteSleeveValue();
+  const sleevePct = pv ? (sleeveVal/pv*100) : 0;
+  document.getElementById('ovSleeveLabel').textContent = fmtPct(sleevePct) + ' of P2';
+  const sf = document.getElementById('ovSleeveFill');
+  sf.style.width = Math.min(sleevePct,100) + '%';
+  sf.style.background = sleevePct >= 10 ? 'var(--red)' : sleevePct >= 8 ? 'var(--yellow)' : 'var(--phase)';
+
+  // Quick projections
+  const proj = calcProjections(pv, by, 0, 10);
+  document.getElementById('ovY10').textContent = fmt$(proj[10] ? proj[10].monthlyIncome : 0);
+  const proj15 = calcProjections(pv, by, 0, 15);
+  document.getElementById('ovY15').textContent = fmt$(proj15[15] ? proj15[15].monthlyIncome : 0);
+  const proj20 = calcProjections(pv, by, 0, 20);
+  document.getElementById('ovY20').textContent = fmt$(proj20[20] ? proj20[20].monthlyIncome : 0);
+
+  // Recent dists
+  const recent = [...DB.distributions].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+  if (recent.length === 0) {
+    document.getElementById('ovRecentDist').innerHTML = '<div class="empty">No distributions logged yet</div>';
+  } else {
+    let html = '<table><thead><tr><th>Date</th><th>Ticker</th><th>Amount</th><th>Routed To</th></tr></thead><tbody>';
+    recent.forEach(d => {
+      html += `<tr><td>${d.date}</td><td style="color:var(--gold)">${d.ticker}</td><td>${fmt$(d.amount)}</td><td><span class="tag tag-blue">${d.routedTo}</span></td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('ovRecentDist').innerHTML = html;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// ALLOCATOR
+// ═══════════════════════════════════════════════════════
+function runAllocator() {
+  const amount = parseFloat(document.getElementById('allocAmount').value);
+  const type = document.getElementById('allocType').value;
+  if (!amount || amount <= 0) { alert('Enter a valid dollar amount'); return; }
+
+  const prices = {
+    STRC: parseFloat(document.getElementById('priceSTRC').value)||0,
+    STRF: parseFloat(document.getElementById('priceSTRF').value)||0,
+    STRK: parseFloat(document.getElementById('priceSTRK').value)||0,
+    VT:   parseFloat(document.getElementById('priceVT').value)||0,
+    MSTR: parseFloat(document.getElementById('priceMSTR').value)||0,
+    MPJPY:parseFloat(document.getElementById('priceMPJPY').value)||0,
+    ASST: parseFloat(document.getElementById('priceASST').value)||0,
+    SCHD: parseFloat(document.getElementById('priceSCHD').value)||0,
+    CGDV: parseFloat(document.getElementById('priceCGDV').value)||0,
+  };
+
+  const PAR = 100;
+  const allocations = [];
+
+  if (type === 'contribution') {
+    // Step 1: Calculate current Core 4 live values and target dollar values
+    const allCore4 = DB.funds.filter(f => f.sleeve === 'core4');
+    const totalTargetPct = allCore4.reduce((s,f) => s+(f.targetRatio||0), 0) || 100;
+
+    // Current Core 4 total value (live prices where entered, else cost basis)
+    const core4LiveVal = allCore4.reduce((s,f) => {
+      const live = prices[f.ticker] || f.avgCost || 0;
+      return s + (f.shares||0) * live;
+    }, 0);
+
+    // New total after this contribution (Core 4 portion = full amount, satellites separate)
+    // We calculate drift on the current Core 4 pool + this contribution
+    const newCore4Pool = core4LiveVal + amount;
+
+    // Step 2: For each Core 4 fund, calculate target value and shortfall
+    const eligible = [];
+    const blocked = [];
+
+    allCore4.forEach(f => {
+      const price = prices[f.ticker] || 0;
+      const currentVal = (f.shares||0) * (prices[f.ticker] || f.avgCost || 0);
+      const targetPct = (f.targetRatio||0) / totalTargetPct;
+      const targetVal = newCore4Pool * targetPct;
+      const shortfall = Math.max(targetVal - currentVal, 0);
+      const parPct = price ? ((price - PAR) / PAR * 100) : 0;
+      const isVT = f.ticker === 'VT';
+      const abovePar = !isVT && price > PAR;
+
+      if (abovePar) {
+        blocked.push({ ...f, price, parPct, shortfall, currentVal, targetVal });
+      } else {
+        eligible.push({ ...f, price, parPct, shortfall, currentVal, targetVal, isVT });
+      }
+    });
+
+    // Step 3: Distribute contribution to eligible funds by shortfall
+    const totalShortfall = eligible.reduce((s,f) => s+f.shortfall, 0);
+    let overflowAmt = 0;
+
+    if (totalShortfall <= 0) {
+      // No drift — split by target ratio among eligible
+      const eligibleRatioSum = eligible.reduce((s,f) => s+(f.targetRatio||0), 0);
+      eligible.forEach(f => {
+        const fAmt = eligibleRatioSum ? amount * ((f.targetRatio||0)/eligibleRatioSum) : 0;
+        if (fAmt > 0.01) {
+          const parPct = f.isVT ? null : (f.price ? ((f.price-PAR)/PAR*100) : 0);
+          allocations.push({
+            ticker: f.ticker,
+            amount: fAmt,
+            reason: f.isVT ? 'VT — always eligible, target 15%' : `At/below par (${parPct.toFixed(1)}%) — no drift, target ratio`,
+            price: f.price || 0,
+            tag: 'core4'
+          });
+        }
+      });
+    } else {
+      // Drift correction — weight by shortfall, capped at actual shortfall per fund
+      let remaining = amount;
+      // Sort: largest shortfall first (most underweight gets priority)
+      const sorted = [...eligible].sort((a,b) => b.shortfall - a.shortfall);
+      sorted.forEach(f => {
+        if (remaining <= 0.01) return;
+        const weight = f.shortfall / totalShortfall;
+        const proposed = amount * weight;
+        // Cap at shortfall — don't overshoot target
+        const fAmt = Math.min(proposed, f.shortfall, remaining);
+        if (fAmt > 0.01) {
+          const catchUp = f.shortfall > (newCore4Pool * (f.targetRatio||0)/totalTargetPct * 0.05);
+          const parPct = f.isVT ? null : (f.price ? ((f.price-PAR)/PAR*100) : 0);
+          allocations.push({
+            ticker: f.ticker,
+            amount: fAmt,
+            reason: f.isVT
+              ? `VT — catch-up, ${((f.currentVal/core4LiveVal)*100).toFixed(1)}% actual vs ${f.targetRatio}% target`
+              : `${catchUp?'Priority catch-up':'Drift correction'} (${parPct.toFixed(1)}% vs par) — ${((f.currentVal/core4LiveVal)*100).toFixed(1)}% actual vs ${f.targetRatio}% target`,
+            price: f.price || 0,
+            tag: 'core4'
+          });
+          remaining -= fAmt;
+        }
+      });
+      overflowAmt = remaining;
+    }
+
+    // Step 4: Blocked preferreds — show as blocked, their shortfall becomes overflow
+    blocked.forEach(f => {
+      const parPct = f.price ? ((f.price-PAR)/PAR*100).toFixed(1) : '?';
+      allocations.push({
+        ticker: f.ticker,
+        amount: 0,
+        reason: `BLOCKED — ${parPct}% above par ($${f.price.toFixed(2)}) · shortfall ${f.shortfall > 0 ? '$'+f.shortfall.toFixed(2) : 'none'} will catch up next round`,
+        price: f.price,
+        tag: 'blocked'
+      });
+      // overflowAmt is already correct via remaining — do not add here
+    });
+
+    // Step 5: Deploy overflow to satellites then DG
+    if (overflowAmt > 0.01) {
+      const satResult = bestSatellite(prices, overflowAmt);
+      if (satResult) {
+        allocations.push(...satResult);
+      } else {
+        allocations.push(...dgAlloc(overflowAmt, prices, 'Core 4 overflow — dividend growth'));
+      }
+    }
+
+  } else {
+    // DISTRIBUTION — satellites first, then DG
+    const satResult = bestSatellite(prices, amount);
+    if (satResult) {
+      allocations.push(...satResult);
+    } else {
+      allocations.push(...dgAlloc(amount, prices, 'No qualifying satellite — deploying to dividend growth'));
+    }
+  }
+
+  renderAllocOutput(allocations, amount);
+}
+
+function bestSatellite(prices, amount) {
+  const pv = portfolioValueLive(prices);
+  const sleeveVal = satelliteSleeveValueLive(prices);
+  const sleevePct = pv ? (sleeveVal/pv*100) : 0;
+
+  // Gate 2: sleeve concentration hard block (uses live prices)
+  if (sleevePct >= 10) return null;
+
+  const sats = ['MSTR','MPJPY','ASST'];
+  const candidates = [];
+
+  sats.forEach(ticker => {
+    const f = getSatellite(ticker);
+    const shares = f ? (f.shares||0) : 0;
+    const basis = f ? (f.avgCost||0) : 0;
+    const price = prices[ticker]||0;
+    if (!price || !basis) return;
+
+    // Gate 1: share cap
+    if (shares >= 100) return;
+
+    const appPct = ((price - basis) / basis * 100);
+
+    // Gate 3: red zone hard skip
+    if (appPct > 35) return;
+
+    const status = appPct > 20 ? 'yellow' : 'green';
+    const sharesLeft = 100 - shares;
+
+    candidates.push({ ticker, shares, basis, price, appPct, status, sharesLeft });
+  });
+
+  if (candidates.length === 0) return null;
+
+  // Sort by lowest appreciation % from basis (best value first)
+  candidates.sort((a, b) => a.appPct - b.appPct);
+
+  const results = [];
+  let remaining = amount;
+
+  // Sleeve room before hitting 10% concentration cap
+  const sleeveRoomDollars = pv ? Math.max(pv * 0.10 - sleeveVal, 0) : Infinity;
+  let sleeveRemaining = sleeveRoomDollars;
+
+  for (const sat of candidates) {
+    if (remaining <= 0.01) break;
+    if (sleeveRemaining <= 0.01) break;
+
+    // Yellow: only half the remaining pool goes to this satellite
+    const poolForThisSat = sat.status === 'yellow' ? remaining * 0.5 : remaining;
+
+    // Ceiling 1: cost to fill remaining shares to 100-share cap
+    const maxByShareCap = sat.sharesLeft * sat.price;
+
+    // Ceiling 2: sleeve concentration room
+    const maxBySleeve = sleeveRemaining;
+
+    const spend = Math.min(poolForThisSat, maxByShareCap, maxBySleeve);
+
+    if (spend < 0.01) continue;
+
+    const reasonParts = [
+      `+${sat.appPct.toFixed(1)}% above basis`,
+      `${sat.sharesLeft.toFixed(0)} shares to cap`
+    ];
+    if (sat.status === 'yellow') reasonParts.push('yellow zone — half deployment');
+
+    results.push({
+      ticker: sat.ticker,
+      amount: spend,
+      reason: reasonParts.join(' · '),
+      price: sat.price,
+      tag: 'satellite'
+    });
+
+    remaining -= spend;
+    sleeveRemaining -= spend;
+  }
+
+  // Cascade remainder to DG after satellites are exhausted or capped
+  if (remaining > 0.01) {
+    const dgReason = sleeveRemaining <= 0.01
+      ? 'Sleeve at 10% cap — overflow to dividend growth'
+      : 'No further qualifying satellites — dividend growth';
+    results.push(...dgAlloc(remaining, { SCHD: prices.SCHD||0, CGDV: prices.CGDV||0 }, dgReason));
+  }
+
+  return results.length > 0 ? results : null;
+}
+
+function dgAlloc(amount, prices, reason) {
+  const schdAmt = amount * 0.70;
+  const cgdvAmt = amount * 0.30;
+  const result = [];
+  if (schdAmt > 0) result.push({ ticker:'SCHD', amount:schdAmt, reason: reason || 'Dividend growth — 70%', price:prices.SCHD||0, tag:'dg' });
+  if (cgdvAmt > 0) result.push({ ticker:'CGDV', amount:cgdvAmt, reason: reason || 'Dividend growth — 30%', price:prices.CGDV||0, tag:'dg' });
+  return result;
+}
+
+function renderAllocOutput(allocations, total) {
+  const tagColors = { core4:'tag-gold', satellite:'tag-phase', dg:'tag-green', blocked:'tag-red' };
+  const tagLabels = { core4:'Core 4', satellite:'Satellite', dg:'Div Growth', blocked:'Blocked' };
+
+  let deployedTotal = allocations.reduce((s,a) => s + (a.amount||0), 0);
+
+  let html = `<div class="alloc-result">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text)">Deployment Plan</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3)">Total: ${fmt$(total)}</div>
+    </div>`;
+
+  allocations.forEach(a => {
+    const shares = (a.price && a.amount) ? (a.amount/a.price).toFixed(3) : '—';
+    const tagClass = tagColors[a.tag] || 'tag-blue';
+    const tagLabel = tagLabels[a.tag] || a.tag;
+    html += `<div class="alloc-row">
+      <div class="alloc-ticker">${a.ticker}</div>
+      <div style="flex:1;padding:0 12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px;">${a.reason}</div>
+        <span class="tag ${tagClass}">${tagLabel}</span>
+        ${a.price ? `<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-left:8px;">@ ${fmt$(a.price)}/sh</span>` : ''}
+      </div>
+      <div style="text-align:right;">
+        <div class="alloc-amount">${a.amount > 0 ? fmt$(a.amount) : '—'}</div>
+        <div class="alloc-shares">${a.amount > 0 ? '~' + shares + ' sh' : ''}</div>
+      </div>
+    </div>`;
+  });
+
+  html += '</div>';
+  document.getElementById('allocOutput').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════
+// SATELLITES
+// ═══════════════════════════════════════════════════════
+function renderSatellites() {
+  const pv = portfolioValue();
+  const sleeveVal = satelliteSleeveValue();
+  const sleevePct = pv ? (sleeveVal/pv*100) : 0;
+  const gateOk = sleevePct < 10;
+
+  document.getElementById('satConcentration').innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>${fmt$(sleeveVal)} of ${fmt$(pv)} portfolio</span>
+        <span style="color:${gateOk?'var(--green)':'var(--red)'}">${fmtPct(sleevePct)} / 10% max</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(sleevePct,100)}%;background:${sleevePct>=10?'var(--red)':sleevePct>=8?'var(--yellow)':'var(--green)'}"></div></div>
+    </div>
+    <div style="margin-top:8px;"><span class="tag ${gateOk?'tag-green':'tag-red'}">${gateOk?'Gate 2: PASS':'Gate 2: BLOCKED — At concentration limit'}</span></div>
+  `;
+
+  const sats = ['MSTR','MPJPY','ASST'];
+  let satHTML = '';
+  sats.forEach(ticker => {
+    const f = getSatellite(ticker);
+    const shares = f ? (f.shares||0) : 0;
+    const basis = f ? (f.avgCost||0) : 0;
+    const pct = Math.min(shares/100*100,100);
+    const capped = shares >= 100;
+
+    satHTML += `<div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)">${ticker}</div>
+        <span class="tag ${capped?'tag-green':'tag-gold'}">${capped?'Capped ✓':`${(100-shares).toFixed(0)} shares to cap`}</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>${fmtShares(shares)} shares</span><span>100 share cap</span></div>
+        <div class="progress-bar"><div class="progress-fill ${capped?'fill-green':'fill-gold'}" style="width:${pct}%"></div></div>
+      </div>
+      <div class="gate-row" style="margin-top:10px;">
+        <div class="gate-icon">${capped?'🔴':'🟢'}</div>
+        <div class="gate-label">Gate 1: Share Cap</div>
+        <div class="gate-value">${capped?'BLOCKED':'PASS'}</div>
+      </div>
+      <div class="gate-row">
+        <div class="gate-icon">${gateOk?'🟢':'🔴'}</div>
+        <div class="gate-label">Gate 2: Concentration (&lt;10% P2)</div>
+        <div class="gate-value">${gateOk?'PASS':'BLOCKED'}</div>
+      </div>
+      <div class="gate-row">
+        <div class="gate-icon">⚪</div>
+        <div class="gate-label">Gate 3: Price vs Basis</div>
+        <div class="gate-value" style="color:var(--text3)">${basis ? 'Enter price in Allocator' : 'Set cost basis in Funds'}</div>
+      </div>
+      ${basis ? `<div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);">Avg cost basis: ${fmt$(basis)} &nbsp;|&nbsp; Position value: ${fmt$(shares*basis)}</div>` : ''}
+    </div>`;
+  });
+  document.getElementById('satCards').innerHTML = satHTML;
+
+  // Phase trigger
+  const mpjpy = getSatellite('MPJPY');
+  const asst = getSatellite('ASST');
+  const mpjpyDone = mpjpy && (mpjpy.shares||0) >= 100;
+  const asstDone = asst && (asst.shares||0) >= 100;
+  document.getElementById('phaseTriggerDetail').innerHTML = `
+    <div class="gate-row">
+      <div class="gate-icon">${mpjpyDone?'✅':'⬡'}</div>
+      <div class="gate-label">MPJPY at 100 shares</div>
+      <div class="gate-value">${mpjpy ? fmtShares(mpjpy.shares||0) : '0'} / 100</div>
+    </div>
+    <div class="gate-row">
+      <div class="gate-icon">${asstDone?'✅':'⬡'}</div>
+      <div class="gate-label">ASST at 100 shares</div>
+      <div class="gate-value">${asst ? fmtShares(asst.shares||0) : '0'} / 100</div>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:var(--surface2);border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:${mpjpyDone&&asstDone?'var(--green)':'var(--text3)'};">
+      ${mpjpyDone && asstDone ? '✓ Phase 2 trigger met — activate covered calls and dividend growth sleeve' : 'Phase 2 triggers when both conditions above are met'}
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════
+// PROJECTIONS
+// ═══════════════════════════════════════════════════════
+function calcProjections(startVal, yieldPct, monthlyContrib, years, doubleAt) {
+  const results = {};
+  let pv = startVal;
+  const annualYield = (yieldPct||9) / 100;
+  let mc = monthlyContrib || 0;
+
+  for (let y = 1; y <= years; y++) {
+    if (doubleAt && y === doubleAt) mc = mc * 2;
+    pv = pv * (1 + annualYield) + mc * 12;
+    results[y] = {
+      portfolioValue: pv,
+      monthlyIncome: (pv * annualYield) / 12
+    };
+  }
+  return results;
+}
+
+function prefillProjections() {
+  const pv = portfolioValue();
+  if (pv > 0) document.getElementById('projStart').value = pv.toFixed(0);
+}
+
+function runProjections() {
+  const startInput = parseFloat(document.getElementById('projStart').value);
+  const pv = startInput || portfolioValue() || 0;
+  const yld = parseFloat(document.getElementById('projYield').value) || 9;
+  const mc = parseFloat(document.getElementById('projContrib').value) || 0;
+  const doubleAt = parseInt(document.getElementById('projDoubleAt').value) || 0;
+
+  const milestones = [5, 10, 15, 20];
+  const results = calcProjections(pv, yld, mc, 20, doubleAt);
+
+  const maxIncome = Math.max(...milestones.map(y => results[y] ? results[y].monthlyIncome : 0));
+
+  let barsHTML = '<div class="proj-chart">';
+  milestones.forEach(y => {
+    const r = results[y] || { portfolioValue:0, monthlyIncome:0 };
+    const h = maxIncome ? Math.max((r.monthlyIncome/maxIncome)*100, 4) : 4;
+    barsHTML += `<div class="proj-bar-wrap">
+      <div class="proj-bar-val">${fmt$(r.monthlyIncome)}</div>
+      <div class="proj-bar" style="height:${h}%"></div>
+      <div class="proj-bar-label">Yr ${y}</div>
+    </div>`;
+  });
+  barsHTML += '</div>';
+
+  let tableHTML = '<table><thead><tr><th>Year</th><th>Portfolio Value</th><th>Monthly Income</th><th>Annual Income</th></tr></thead><tbody>';
+  milestones.forEach(y => {
+    const r = results[y] || { portfolioValue:0, monthlyIncome:0 };
+    const isDouble = doubleAt && y === doubleAt;
+    tableHTML += `<tr>
+      <td><span style="color:var(--gold);font-weight:500">Year ${y}</span>${isDouble?'<span class="tag tag-phase" style="margin-left:6px">2x contrib</span>':''}</td>
+      <td>${fmt$(r.portfolioValue)}</td>
+      <td style="color:var(--green)">${fmt$(r.monthlyIncome)}</td>
+      <td>${fmt$(r.monthlyIncome*12)}</td>
+    </tr>`;
+  });
+  tableHTML += '</tbody></table>';
+
+  const note = doubleAt ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-top:8px;">Contributions double at Year ${doubleAt}: ${fmt$(mc)}/mo → ${fmt$(mc*2)}/mo</div>` : '';
+
+  document.getElementById('projOutput').innerHTML = `
+    <div class="card">
+      <div class="card-title">Income Projections — ${fmtPct(yld)} yield, ${fmt$(mc)}/mo contributions</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:4px;">Starting value: ${fmt$(pv)}</div>
+      ${barsHTML}
+      ${tableHTML}
+      ${note}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// DIST LOG
+// ═══════════════════════════════════════════════════════
+let distFilter = '30d';
+
+function setDistFilter(f, btn) {
+  distFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDistLog();
+}
+
+function addDist() {
+  const ticker = document.getElementById('dlTicker').value;
+  const amount = parseFloat(document.getElementById('dlAmount').value);
+  const date = document.getElementById('dlDate').value;
+  const routedTo = document.getElementById('dlRoutedTo').value;
+  if (!ticker || !amount || !date) { alert('Fill in all fields'); return; }
+  DB.distributions.push({ id: Date.now(), ticker, amount, date, routedTo });
+  save(DB);
+  document.getElementById('dlAmount').value = '';
+  renderDistLog();
+  renderOverview();
+}
+
+function deleteDist(id) {
+  if (!confirm('Delete this distribution?')) return;
+  DB.distributions = DB.distributions.filter(d => d.id !== id);
+  save(DB);
+  renderDistLog();
+}
+
+function renderDistLog() {
+  const dists = filterDists(distFilter).sort((a,b) => new Date(b.date)-new Date(a.date));
+  const total = dists.reduce((s,d)=>s+d.amount,0);
+  const toSat = dists.filter(d=>['MSTR','MPJPY','ASST'].includes(d.routedTo)).reduce((s,d)=>s+d.amount,0);
+  const toDG = dists.filter(d=>['SCHD','CGDV'].includes(d.routedTo)).reduce((s,d)=>s+d.amount,0);
+  const toExternal = dists.filter(d=>['P1-CSHI','BTC-Direct','External'].includes(d.routedTo)).reduce((s,d)=>s+d.amount,0);
+
+  document.getElementById('dlStats').innerHTML = `
+    <div class="card" style="margin-bottom:0"><div class="stat-label">Total</div><div class="stat-value" style="font-size:18px">${fmt$(total)}</div></div>
+    <div class="card" style="margin-bottom:0"><div class="stat-label">To Satellites</div><div class="stat-value" style="font-size:18px;color:var(--phase)">${fmt$(toSat)}</div></div>
+    <div class="card" style="margin-bottom:0"><div class="stat-label">To Div Growth</div><div class="stat-value" style="font-size:18px;color:var(--green)">${fmt$(toDG)}</div></div>
+    <div class="card" style="margin-bottom:0"><div class="stat-label">External</div><div class="stat-value" style="font-size:18px;color:var(--text2)">${fmt$(toExternal)}</div><div class="stat-sub">P1/BTC/Other</div></div>
+  `;
+
+  const tbody = document.getElementById('dlTable');
+  if (dists.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px;">No distributions logged</td></tr>';
+    return;
+  }
+  tbody.innerHTML = dists.map(d => `
+    <tr>
+      <td>${d.date}</td>
+      <td style="color:var(--gold)">${d.ticker}</td>
+      <td>${fmt$(d.amount)}</td>
+      <td><span class="tag tag-blue">${d.routedTo}</span></td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteDist(${d.id})">✕</button></td>
+    </tr>`).join('');
+
+  // Populate ticker dropdown
+  const tickers = [...new Set(DB.funds.map(f=>f.ticker))].sort();
+  const sel = document.getElementById('dlTicker');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Select fund</option>' + tickers.map(t=>`<option value="${t}" ${t===cur?'selected':''}>${t}</option>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// FUNDS
+// ═══════════════════════════════════════════════════════
+function addFund() {
+  const ticker = document.getElementById('fTicker').value.toUpperCase().trim();
+  const sleeve = document.getElementById('fSleeve').value;
+  const shares = parseFloat(document.getElementById('fShares').value)||0;
+  const avgCost = parseFloat(document.getElementById('fAvgCost').value)||0;
+  const distPerShare = parseFloat(document.getElementById('fDistPerShare').value)||0;
+  const freq = document.getElementById('fFreq').value;
+  const targetRatio = parseFloat(document.getElementById('fTargetRatio').value)||0;
+  if (!ticker) { alert('Enter a ticker'); return; }
+
+  const idx = DB.funds.findIndex(f=>f.ticker===ticker&&f.sleeve===sleeve);
+  const fund = { ticker, sleeve, shares, avgCost, distPerShare, freq, targetRatio };
+  if (idx >= 0) DB.funds[idx] = fund;
+  else DB.funds.push(fund);
+  save(DB);
+
+  // Clear
+  ['fTicker','fShares','fAvgCost','fDistPerShare','fTargetRatio'].forEach(id=>document.getElementById(id).value='');
+  renderFunds();
+  renderOverview();
+}
+
+function deleteFund(ticker, sleeve) {
+  if (!confirm(`Delete ${ticker}?`)) return;
+  DB.funds = DB.funds.filter(f=>!(f.ticker===ticker&&f.sleeve===sleeve));
+  save(DB);
+  renderFunds();
+}
+
+function editFund(ticker, sleeve) {
+  const f = DB.funds.find(f=>f.ticker===ticker&&f.sleeve===sleeve);
+  if (!f) return;
+  document.getElementById('fTicker').value = f.ticker;
+  document.getElementById('fSleeve').value = f.sleeve;
+  document.getElementById('fShares').value = f.shares;
+  document.getElementById('fAvgCost').value = f.avgCost;
+  document.getElementById('fDistPerShare').value = f.distPerShare;
+  document.getElementById('fFreq').value = f.freq;
+  document.getElementById('fTargetRatio').value = f.targetRatio;
+  document.getElementById('fTicker').focus();
+}
+
+function renderFundTable(funds, showPar) {
+  if (funds.length === 0) return '<div class="empty">No funds added</div>';
+  let html = '<table><thead><tr><th>Ticker</th><th>Shares</th><th>Avg Cost</th><th>Dist/Sh</th><th>Annual Income</th><th>Yield</th>';
+  if (showPar) html += '<th>vs Par</th>';
+  html += '<th></th></tr></thead><tbody>';
+  funds.forEach(f => {
+    const val = (f.shares||0)*(f.avgCost||0);
+    const annual = (f.shares||0)*(f.distPerShare||0);
+    const yld = val ? (annual/val*100) : 0;
+    let parCell = '';
+    if (showPar) {
+      const parDiff = f.avgCost ? ((f.avgCost-100)/100*100) : 0;
+      parCell = `<td><span class="tag ${parDiff>0?'tag-red':'tag-green'}">${parDiff>=0?'+':''}${parDiff.toFixed(1)}%</span></td>`;
+    }
+    html += `<tr>
+      <td style="color:var(--gold)">${f.ticker}</td>
+      <td>${fmtShares(f.shares)}</td>
+      <td>${fmt$(f.avgCost)}</td>
+      <td>${fmt$(f.distPerShare)}</td>
+      <td>${fmt$(annual)}</td>
+      <td>${fmtPct(yld)}</td>
+      ${parCell}
+      <td style="display:flex;gap:6px;">
+        <button class="btn btn-sm btn-outline" onclick="editFund('${f.ticker}','${f.sleeve}')">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteFund('${f.ticker}','${f.sleeve}')">✕</button>
+      </td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+function renderFunds() {
+  document.getElementById('fundsCore4').innerHTML = renderFundTable(DB.funds.filter(f=>f.sleeve==='core4'), true);
+  document.getElementById('fundsSatellites').innerHTML = renderFundTable(DB.funds.filter(f=>f.sleeve==='satellite'), false);
+  document.getElementById('fundsDG').innerHTML = renderFundTable(DB.funds.filter(f=>f.sleeve==='dg'), false);
+
+  // Update dist log ticker dropdown
+  const tickers = [...new Set(DB.funds.map(f=>f.ticker))].sort();
+  const sel = document.getElementById('dlTicker');
+  sel.innerHTML = '<option value="">Select fund</option>' + tickers.map(t=>`<option value="${t}">${t}</option>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+function renderData() {
+  const size = new Blob([JSON.stringify(DB)]).size;
+  document.getElementById('storageInfo').textContent =
+    `${DB.funds.length} funds · ${DB.distributions.length} distributions · ~${(size/1024).toFixed(1)} KB stored`;
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(DB, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='p2_backup.json'; a.click();
+}
+
+function exportCSV() {
+  let csv = 'Date,Ticker,Amount,RoutedTo\n';
+  DB.distributions.forEach(d => { csv += `${d.date},${d.ticker},${d.amount},${d.routedTo}\n`; });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='p2_distributions.csv'; a.click();
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.funds || !data.distributions) throw new Error('Invalid format');
+      DB = data;
+      save(DB);
+      renderOverview();
+      renderFunds();
+      alert('Import successful');
+    } catch(err) { alert('Import failed: ' + err.message); }
+  };
+  reader.readAsText(file);
+}
+
+function resetAll() {
+  if (!confirm('Reset ALL data? This cannot be undone.')) return;
+  DB = defaultData();
+  save(DB);
+  renderOverview();
+  renderFunds();
+  renderData();
+  alert('Reset complete');
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.getElementById('dlDate').valueAsDate = new Date();
+renderOverview();
+renderFunds();
+renderDistLog();
+</script>
+</body>
+</html>
